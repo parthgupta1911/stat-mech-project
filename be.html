@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stat Mech Simulator - Maxwell-Boltzmann</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>boltzmann einstein Simulator</h1>
+    <h2>
+      Number of particles: <span id="particles"></span>, Number of states:
+      <span id="states"></span>
+    </h2>
+    <h3>Number of possibilities: <span id="possibilities"></span></h3>
+    <table id="results"></table>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const particles = parseInt(urlParams.get("particles"));
+      const states = parseInt(urlParams.get("states"));
+      document.getElementById("particles").textContent = particles;
+      document.getElementById("states").textContent = states;
+
+      let possibilities;
+
+      function calculatePossibilities(n, m) {
+        return Math.pow(m, n);
+      }
+      function generateStates(n, m) {
+        const states = [];
+        backtrack(states, [], n, m, 0, 0);
+        possibilities = states.length;
+        document.getElementById("possibilities").textContent = possibilities;
+        return states;
+      }
+
+      function backtrack(states, current, n, m, cnt, last) {
+        if (current.length === m) {
+          if (cnt === n) {
+            states.push(current.slice());
+          }
+          return;
+        }
+        if (cnt < n) {
+          current.push("A");
+          backtrack(states, current, n, m, cnt + 1, last + 1);
+          current.pop();
+        }
+        current.push("-");
+        backtrack(states, current, n, m, cnt, last);
+        current.pop();
+      }
+
+      function generateTable(n, m) {
+        const table = document.getElementById("results");
+        table.innerHTML = "";
+
+        // Generate table header
+        const headerRow = table.insertRow();
+        for (let i = 1; i <= m; i++) {
+          const cell = headerRow.insertCell();
+          cell.textContent = `State ${i}`;
+        }
+
+        // Generate table rows
+        const allStates = generateStates(n, m);
+        allStates.forEach((state) => {
+          const row = table.insertRow();
+          for (let i = 0; i < state.length; i++) {
+            const cell = row.insertCell();
+            cell.textContent = state[i];
+          }
+        });
+      }
+
+      generateTable(particles, states);
+    </script>
+  </body>
+</html>

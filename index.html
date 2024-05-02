@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boltzmann einstein Simulator</title>
+  </head>
+  <body>
+    <form id="inputForm">
+      <label for="particles">Number of particles (n):</label>
+      <input
+        type="number"
+        id="particles"
+        name="particles"
+        min="1"
+        max="10"
+        required
+      /><br /><br />
+
+      <label for="states">Number of states (m):</label>
+      <input
+        type="number"
+        id="states"
+        name="states"
+        min="1"
+        required
+      /><br /><br />
+
+      <button type="submit">Simulate</button>
+    </form>
+
+    <script>
+      document.getElementById("inputForm").onsubmit = function (event) {
+        event.preventDefault();
+        const particles = document.getElementById("particles").value;
+        const states = document.getElementById("states").value;
+        window.location.href = `be.html?particles=${particles}&states=${states}`;
+      };
+    </script>
+  </body>
+</html>
